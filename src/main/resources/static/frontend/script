@@ -1,0 +1,89 @@
+const API_URL = "http://localhost:8080/api";
+
+function cargarTransacciones(){
+
+fetch(API_URL + "/transactions")
+.then(response => response.json())
+.then(data => {
+
+let tabla = document.getElementById("tablaTransacciones");
+tabla.innerHTML = "";
+
+data.forEach(t => {
+
+let fila = `
+<tr>
+<td>${t.id}</td>
+<td>${t.senderAccountNumber}</td>
+<td>${t.receiverAccountNumber}</td>
+<td>${t.amount}</td>
+<td>${t.timestamp}</td>
+</tr>
+`;
+
+tabla.innerHTML += fila;
+
+});
+
+});
+
+}
+
+
+function cargarClientes(){
+
+fetch(API_URL + "/customers")
+.then(response => response.json())
+.then(data => {
+
+let tabla = document.getElementById("tablaClientes");
+tabla.innerHTML = "";
+
+data.forEach(c => {
+
+let fila = `
+<tr>
+<td>${c.id}</td>
+<td>${c.name}</td>
+<td>${c.email}</td>
+</tr>
+`;
+
+tabla.innerHTML += fila;
+
+});
+
+});
+
+}
+
+
+document.getElementById("formTransferencia")?.addEventListener("submit", function(e){
+
+e.preventDefault();
+
+let data = {
+
+senderAccountNumber: document.getElementById("senderAccountNumber").value,
+receiverAccountNumber: document.getElementById("receiverAccountNumber").value,
+amount: document.getElementById("amount").value
+
+};
+
+fetch(API_URL + "/transactions",{
+
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body: JSON.stringify(data)
+
+})
+.then(response => response.json())
+.then(data => {
+
+alert("Transferencia realizada correctamente");
+
+});
+
+});
